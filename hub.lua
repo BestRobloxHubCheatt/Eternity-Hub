@@ -1,5 +1,5 @@
 -- ============================================
--- ETERNITY HUB - MAIN MENU
+-- ETERNITY HUB - MAIN MENU (FIXED)
 -- ============================================
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -75,45 +75,51 @@ container.Parent = mainFrame
 -- ============================================
 -- РАЗДЕЛ "SETTINGS"
 -- ============================================
-local settingsSection = Instance.new("Frame")
-settingsSection.Size = UDim2.new(0, 250, 1, 0)
-settingsSection.Position = UDim2.new(0, 0, 0, 0)
-settingsSection.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
-settingsSection.BackgroundTransparency = 0.2
-settingsSection.BorderSizePixel = 0
-settingsSection.ClipsDescendants = true
-settingsSection.Parent = container
+local function createSection(parent, xPos, icon, title, desc)
+    local section = Instance.new("Frame")
+    section.Size = UDim2.new(0, 250, 1, 0)
+    section.Position = UDim2.new(xPos, 0, 0, 0)
+    section.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+    section.BackgroundTransparency = 0.2
+    section.BorderSizePixel = 0
+    section.ClipsDescendants = true
+    section.Parent = parent
+    
+    local iconLabel = Instance.new("TextLabel")
+    iconLabel.Size = UDim2.new(0, 50, 0, 50)
+    iconLabel.Position = UDim2.new(0.5, -25, 0, 15)
+    iconLabel.Text = icon
+    iconLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    iconLabel.TextScaled = true
+    iconLabel.BackgroundTransparency = 1
+    iconLabel.Font = Enum.Font.GothamBold
+    iconLabel.Parent = section
+    
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(1, 0, 0, 30)
+    titleLabel.Position = UDim2.new(0, 0, 0, 70)
+    titleLabel.Text = title
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.TextScaled = true
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Parent = section
+    
+    local descLabel = Instance.new("TextLabel")
+    descLabel.Size = UDim2.new(1, -20, 0, 60)
+    descLabel.Position = UDim2.new(0, 10, 0, 105)
+    descLabel.Text = desc
+    descLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    descLabel.TextSize = 14
+    descLabel.TextWrapped = true
+    descLabel.Font = Enum.Font.Gotham
+    descLabel.BackgroundTransparency = 1
+    descLabel.Parent = section
+    
+    return section
+end
 
-local settingsIcon = Instance.new("TextLabel")
-settingsIcon.Size = UDim2.new(0, 50, 0, 50)
-settingsIcon.Position = UDim2.new(0.5, -25, 0, 15)
-settingsIcon.Text = "⚙️"
-settingsIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
-settingsIcon.TextScaled = true
-settingsIcon.BackgroundTransparency = 1
-settingsIcon.Font = Enum.Font.GothamBold
-settingsIcon.Parent = settingsSection
-
-local settingsTitle = Instance.new("TextLabel")
-settingsTitle.Size = UDim2.new(1, 0, 0, 30)
-settingsTitle.Position = UDim2.new(0, 0, 0, 70)
-settingsTitle.Text = "SETTINGS"
-settingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-settingsTitle.TextScaled = true
-settingsTitle.Font = Enum.Font.GothamBold
-settingsTitle.BackgroundTransparency = 1
-settingsTitle.Parent = settingsSection
-
-local settingsDesc = Instance.new("TextLabel")
-settingsDesc.Size = UDim2.new(1, -20, 0, 60)
-settingsDesc.Position = UDim2.new(0, 10, 0, 105)
-settingsDesc.Text = "Configure script settings, hotkeys and preferences."
-settingsDesc.TextColor3 = Color3.fromRGB(200, 200, 200)
-settingsDesc.TextSize = 14
-settingsDesc.TextWrapped = true
-settingsDesc.Font = Enum.Font.Gotham
-settingsDesc.BackgroundTransparency = 1
-settingsDesc.Parent = settingsSection
+local settingsSection = createSection(container, 0, "⚙️", "SETTINGS", "Configure script settings, hotkeys and preferences.")
 
 local settingsBtn = Instance.new("TextButton")
 settingsBtn.Size = UDim2.new(0, 120, 0, 35)
@@ -129,42 +135,13 @@ settingsBtn.Parent = settingsSection
 
 settingsBtn.MouseButton1Click:Connect(function()
     print("[ETERNITY] Settings opened")
-    -- Здесь будет окно настроек
 end)
 
 -- ============================================
 -- РАЗДЕЛ "GAMES"
 -- ============================================
-local gamesSection = Instance.new("Frame")
-gamesSection.Size = UDim2.new(0, 250, 1, 0)
-gamesSection.Position = UDim2.new(0.5, 0, 0, 0)
-gamesSection.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
-gamesSection.BackgroundTransparency = 0.2
-gamesSection.BorderSizePixel = 0
-gamesSection.ClipsDescendants = true
-gamesSection.Parent = container
+local gamesSection = createSection(container, 0.5, "🎮", "GAMES", "Select a game to load the script.")
 
-local gamesIcon = Instance.new("TextLabel")
-gamesIcon.Size = UDim2.new(0, 50, 0, 50)
-gamesIcon.Position = UDim2.new(0.5, -25, 0, 15)
-gamesIcon.Text = "🎮"
-gamesIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
-gamesIcon.TextScaled = true
-gamesIcon.BackgroundTransparency = 1
-gamesIcon.Font = Enum.Font.GothamBold
-gamesIcon.Parent = gamesSection
-
-local gamesTitle = Instance.new("TextLabel")
-gamesTitle.Size = UDim2.new(1, 0, 0, 30)
-gamesTitle.Position = UDim2.new(0, 0, 0, 70)
-gamesTitle.Text = "GAMES"
-gamesTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-gamesTitle.TextScaled = true
-gamesTitle.Font = Enum.Font.GothamBold
-gamesTitle.BackgroundTransparency = 1
-gamesTitle.Parent = gamesSection
-
--- Список игр
 local gamesList = Instance.new("ScrollingFrame")
 gamesList.Size = UDim2.new(1, -10, 0, 200)
 gamesList.Position = UDim2.new(0, 5, 0, 105)
@@ -201,9 +178,23 @@ for i, gameData in ipairs(games) do
     gameBtn.MouseButton1Click:Connect(function()
         print("[ETERNITY] Loading script for: " .. gameData.name)
         screenGui:Destroy()
-        pcall(function()
-            loadstring(game:HttpGet(gameData.url))()
+        
+        local success, result = pcall(function()
+            return game:HttpGet(gameData.url)
         end)
+        
+        if success and result then
+            local loadSuccess, loadErr = pcall(function()
+                loadstring(result)()
+            end)
+            if loadSuccess then
+                print("[ETERNITY] Script loaded: " .. gameData.name)
+            else
+                warn("[ETERNITY] Script error: " .. tostring(loadErr))
+            end
+        else
+            warn("[ETERNITY] Failed to load script: " .. tostring(result))
+        end
     end)
 end
 
