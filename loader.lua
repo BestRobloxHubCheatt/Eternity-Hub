@@ -1,5 +1,5 @@
 -- ============================================
--- ETERNITY HUB - KEY SYSTEM
+-- ETERNITY HUB - KEY SYSTEM (FIXED)
 -- ============================================
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -10,6 +10,21 @@ local UserInputService = game:GetService("UserInputService")
 local CORRECT_KEY = "Etern1ty"
 local LINK_URL = "https://discord.gg/your-invite"
 local HUB_SCRIPT_URL = "https://raw.githubusercontent.com/BestRobloxHubCheatt/Eternity-Hub/refs/heads/main/hub.lua"
+
+-- ============================================
+-- ПРОВЕРКА HTTP-ЗАПРОСА
+-- ============================================
+local function getScript(url)
+    local success, result = pcall(function()
+        return game:HttpGet(url)
+    end)
+    if success then
+        return result
+    else
+        warn("[ETERNITY] Failed to load script: " .. tostring(result))
+        return nil
+    end
+end
 
 -- ============================================
 -- СОЗДАНИЕ GUI
@@ -34,14 +49,6 @@ mainFrame.BorderSizePixel = 0
 mainFrame.ClipsDescendants = true
 mainFrame.Parent = screenGui
 
--- Размытый фон (эффект стекла)
-local blur = Instance.new("Frame")
-blur.Size = UDim2.new(1, 0, 1, 0)
-blur.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
-blur.BackgroundTransparency = 0.3
-blur.Parent = mainFrame
-
--- Заголовок
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 65)
 header.BackgroundColor3 = Color3.fromRGB(50, 40, 80)
@@ -186,11 +193,22 @@ local function verifyKey(key)
         task.wait(1)
         screenGui:Destroy()
         
-        -- Загружаем основной хаб
+        -- Загружаем основной хаб с проверкой
         print("[ETERNITY] Loading Hub...")
-        pcall(function()
-            loadstring(game:HttpGet(HUB_SCRIPT_URL))()
-        end)
+        local hubScript = getScript(HUB_SCRIPT_URL)
+        if hubScript then
+            local success, err = pcall(function()
+                loadstring(hubScript)()
+            end)
+            if not success then
+                warn("[ETERNITY] Error loading hub: " .. tostring(err))
+                showNotification("⚠️ Error loading hub", Color3.fromRGB(255, 0, 0))
+            else
+                print("[ETERNITY] Hub loaded successfully!")
+            end
+        else
+            showNotification("⚠️ Failed to load hub script", Color3.fromRGB(255, 0, 0))
+        end
         return true
     else
         showNotification("❌ INVALID KEY! Try again", Color3.fromRGB(255, 0, 0))
@@ -263,7 +281,9 @@ UserInputService.InputBegan:Connect(function(input, gp)
     end
 end)
 
--- Анимация появления
+-- ============================================
+-- АНИМАЦИЯ ПОЯВЛЕНИЯ
+-- ============================================
 mainFrame.Position = UDim2.new(0.5, -210, 0.5, -220)
 background.BackgroundTransparency = 1
 for i = 0, 1, 0.05 do
